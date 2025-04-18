@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/adminDashboard.css">
+  <!-- <link rel="stylesheet" href="css/proctorDashboard.css"> -->
+  <link rel="stylesheet" href="css/Ui_loader.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery Added -->
+  <title>Admin Dashboard</title>
+</head>
+<body>
+  <div id="profileContainer">
+    <img id="profilePhoto" src="/images/default-image.jpeg" alt="Profile Photo">
+</div>
+  <header>
+    <button type="button" id="add-subject-button">Add Subject</button>
+    <button type="button" id="delete-subject-button">Delete Subject</button>
+    <button type="button" id="import-student-button">Import Student Data</button>
+    <button type="button" id="import-proctor-button">Import Proctor Data</button> 
+    <button type="button" id="assign-subjects-button">Assign Subjects</button>
+    <!-- <button type="button" id="update-all-marks-button">Update All Student Marks</button> -->
+    <button type="button" id="assign-proctor-button">Assign Proctor</button>
+    <button type="button" id="remove-proctor-button">Remove Proctor Assignment</button>
+    <button type="button" id="edit-subjects-button">Edit Subjects</button>
+    <button type="button" id="upload-subjects-button">Upload Subjects (CSV)</button>
+    <button type="button" id="logoutButton">Logout</button>
+  </header>
+<!-- Button to Open Edit Subjects Modal -->
+
+<!-- Edit Subjects Modal -->
+<div id="edit-subjects-modal" class="modal">
+  <div class="modal-content">
+      <span class="close" id="close-edit-subjects-modal">&times;</span>
+      <h2>Edit Subjects</h2>
+
+      <!-- Batch Selection Dropdown (Dynamically Populated) -->
+      <label for="batch-select">Select Batch:</label>
+      <select id="batch-select">
+          <option value="">Select Batch</option>
+      </select>
+
+      <table id="edit-subjects-table">
+          <thead>
+              <tr>
+                  <th>Subject Name</th>
+                  <th>Subject Code</th>
+                  <th>Credits</th>
+                  <th>Semester</th>
+                  <th>Batch</th>
+                  <th>Department</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+      </table>
+      <button id="save-subject-changes">Save Changes</button>
+  </div>
+</div>
+
+
+  <!-- Modal for Importing Student Data -->
+  <div id="import-student-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-student-modal-import">&times;</span>
+      <h2>Import Student Data</h2>
+      <form id="importStudentForm" enctype="multipart/form-data" method="POST" action="/importStudentData">
+        <label for="studentFileInput">Upload Student CSV or Excel File:</label>
+        <input type="file" id="studentFileInput" name="studentFile" accept=".csv, .xlsx" required>
+        <button type="submit" class="button">Import Student Data</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal for Importing Proctor Data -->
+  <div id="import-proctor-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-proctor-modal">&times;</span>
+      <h2>Import Proctor Data</h2>
+      <form id="importProctorForm" enctype="multipart/form-data" method="POST" action="/importProctorData">
+        <label for="proctorFileInput">Upload Proctor CSV or Excel File:</label>
+        <input type="file" id="proctorFileInput" name="proctorFile" accept=".csv, .xlsx" required>
+        <button type="submit" class="button">Import Proctor Data</button>
+      </form>
+    </div>
+  </div>
+
+<!-- Modal for Adding Subject -->
+<div id="addSubjectModal" class="modal">
+  <div class="modal-content">
+      <span class="close" id="close-add-subject-modal">&times;</span>
+      <h2>Add Subject</h2>
+      <form id="addSubjectForm">
+          <label for="add_semester_id">Semester:</label>
+          <input type="number" id="add_semester_id" name="semester" required><br>
+          <label for="add_subject_name">Subject Name:</label>
+          <input type="text" id="add_subject_name" name="subject_name" required><br>
+          <label for="add_subject_code">Subject Code:</label>
+          <input type="text" id="add_subject_code" name="subject_code" required><br>
+          <label for="add_credits">Credits:</label>
+          <input type="number" id="add_credits" name="credit" required><br>
+          <label for="add_batch">Batch:</label>
+          <input type="text" id="add_batch" name="batch" required placeholder="e.g., 2025-2029"><br>
+          <button type="submit" class="button">Add Subject</button>
+      </form>
+  </div>
+</div>
+
+<!-- Modal for Deleting Subject -->
+<div id="deleteSubjectModal" class="modal">
+  <div class="modal-content">
+      <span class="close" id="close-delete-subject-modal">&times;</span>
+      <h2>Delete Subject</h2>
+      <form id="deleteSubjectForm">
+          <label for="delete_semester_id">Semester:</label>
+          <input type="number" id="delete_semester_id" name="semester" required><br>
+          <label for="delete_subject_code">Subject Code:</label>
+          <input type="text" id="delete_subject_code" name="subject_code" required><br>
+          <label for="delete_batch">Batch:</label>
+          <input type="text" id="delete_batch" name="batch" required placeholder="e.g., 2025-2029"><br>
+          <button type="submit" class="button">Delete Subject</button>
+      </form>
+  </div>
+</div>
+
+
+<!-- Year Selection Popup -->
+<div id="year-selection-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-year-modal">&times;</span>
+        <h2>Select Year</h2>
+        <select id="year-select">
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+        </select>
+        <button id="fetch-students-button">Fetch Students</button>
+    </div>
+</div>
+
+<!-- Upload CSV Modal -->
+<div id="upload-subjects-modal" class="modal">
+  <div class="modal-content">
+      <span class="close" id="close-upload-subjects-modal">&times;</span>
+      <h2>Upload Subjects via CSV</h2>
+      <form id="upload-subject-form" enctype="multipart/form-data">
+          <label>Select CSV File:
+          <input type="file" id="subject-file"  name="subjectFile" accept=".csv" required></label><br>
+          <button type="submit">Upload</button>
+      </form>
+  </div>
+</div>
+
+<!-- Modals -->
+<div id="assign-batch-selection-modal" class="modal">
+  <div class="modal-content">
+      <span class="close" id="close-assign-batch-selection-modal">&times;</span>
+      <h2>Select Batch</h2>
+      <select id="assign-batch-select">
+          <option value="">Select Batch</option>
+      </select>
+      <button id="confirm-assign-batch">Next</button>
+  </div>
+</div>
+
+<div id="assign-year-selection-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-assign-year-selection-modal">&times;</span>
+        <h2>Select Year</h2>
+        <select id="assign-year-select">
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+            <option value="3">3rd Year</option>
+            <option value="4">4th Year</option>
+        </select>
+        <button id="fetch-assign-students">Next</button>
+    </div>
+</div>
+
+
+
+<!-- Remove Proctor Selection Modal -->
+<div id="remove-proctor-selection-modal" class="modal">
+  <div class="modal-content">
+      <span class="close" id="close-remove-proctor-selection-modal">&times;</span>
+      <h2>Select Proctor to Remove</h2>
+      <table id="remove-proctor-table">
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Designation</th>
+                  <th>Department</th>
+                  <th>Select</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+      </table>
+      <button id="confirm-remove-proctor">Remove Proctor</button>
+  </div>
+</div>
+
+<!-- Proctor Selection Modal -->
+<div id="assign-proctor-selection-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-assign-proctor-modal">&times;</span>
+      <h2>Select Proctor</h2>
+      <table id="assign-proctor-table">
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Designation</th>
+                  <th>Department</th>
+                  <th>Select</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+      </table>
+      <button id="confirm-assign-proctor">Next</button>
+  </div>
+</div>
+
+<div id="assign-student-selection-modal" class="modal">
+  <div class="modal-content">
+      <span class="close" id="close-assign-student-selection-modal">&times;</span>
+      <h2>Select Students</h2>
+      <table id="assign-students-table">
+          <thead>
+              <tr>
+                  <th>Name</th>
+                  <th>Reg ID</th>
+                  <th>Assign</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+      </table>
+      <button id="finalize-assign-proctor">Assign Proctor</button>
+  </div>
+</div>
+<!-- Assign Subjects Modal -->
+
+<div id="assign-subjects-modal" class="modal">
+  <div class="modal-content">
+      <span class="close" id="close-assign-subjects-modal">&times;</span>
+      <h2>Assign Subjects</h2>
+
+      <!-- Admin Department (Auto-Fetched) -->
+      <p><strong>Department:</strong> <span id="admin-department"></span></p>
+
+      <!-- Batch Selection -->
+      <label for="assign-batch-select2">Select Batch:</label>
+      <select id="assign-batch-select2">
+          <option value="">Select Batch</option>
+      </select>
+
+      <!-- Confirm Button -->
+      <button id="confirm-assign-subjects">Assign Subjects</button>
+  </div>
+</div>
+
+
+<script src="JS/loder.js"></script>
+  <script src="JS/adminDashboard.js"> console.log(typeof jQuery); // Should return "function"</script>
+  <script src="JS/logout.js"></script>
+</body>
+</html>

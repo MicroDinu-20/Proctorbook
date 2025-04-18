@@ -1,0 +1,22 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore environment variable files
+*.env
+
+# Ignore log files
+*.log
+
+# Ignore service account file (DO NOT commit this!)
+service-account.json
+
+# Ignore specific directories
+academic-progress/
+public/Sql/
+my-react-app/
+uploads/
+
+# Ignore temporary system files
+.DS_Store
+Thumbs.db
+twilio_2FA_recovery_code.txt

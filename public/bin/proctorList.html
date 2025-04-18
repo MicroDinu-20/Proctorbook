@@ -1,0 +1,37 @@
+<!-- proctorList.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proctor List</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+    <h1>Select Your Proctor</h1>
+    <form id="proctorForm" action="/proctorDashboard" method="GET">
+        <ul id="proctorList"></ul>
+        <button type="submit">Go to Selected Proctor Dashboard</button>
+    </form>
+
+    <script>
+        fetch('/proctorList')
+            .then(response => response.json())
+            .then(proctors => {
+                const list = document.getElementById('proctorList');
+                proctors.forEach(proctor => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <label>
+                            <input type="radio" name="proctorId" value="${proctor.proctor_id}" required>
+                            ${proctor.name}
+                        </label>
+                    `;
+                    list.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error loading proctor list:', error));
+    </script>
+</body>
+</html>

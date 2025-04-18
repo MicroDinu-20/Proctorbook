@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" href="css/Ui_loader.css">
+
+
+    <title>Login</title>
+ 
+</head>
+<body>
+
+    <!-- Main Container for Login Page -->
+    <div class="main">
+        <h1 class="heading">Login</h1>
+        
+        <!-- Login Form -->
+        <div class="login">
+            <form id="loginForm" class="form" method="get">
+                
+                <!-- Email Input -->
+                <label for="email" class="form-label"></label>
+                <input type="email" name="email" class="input" id="email" placeholder="Email" required autocomplete="email">
+                
+                <!-- Password Input with Visibility Toggle -->
+                <div class="password-container">
+                    <label for="password" class="form-label"></label>
+                    <input type="password" name="password" class="input" id="password" placeholder="Password" required autocomplete="current-password">
+                    <span id="togglePassword" class="toggle-password">👁️</span>
+                </div>
+                
+                <!-- Remember Me Checkbox -->
+                <div class="checkbox-wrapper-46">
+                    <input type="checkbox" id="rememberMe" class="inp-cbx">
+                    <label for="rememberMe" class="cbx">
+                        <span>
+                            <svg viewBox="0 0 12 10" height="10px" width="12px">
+                                <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                            </svg>
+                        </span>
+                        <span>Remember Me</span>
+                    </label>
+                </div>
+                
+                <!-- Role Selection Buttons -->
+                <div id="roleSelection" class="side-by-side">
+                    <button type="button" class="button" id="proctorButton" value="proctor">Proctor</button>
+                    <button type="button" class="button" id="studentButton" value="student">Student</button>
+                    <button type="button" class="button" id="adminButton" value="admin">Admin</button>
+
+                </div>
+                <input type="hidden" name="role" id="selectedRole" value="">
+                
+                
+                <!-- Submit Button -->
+                <button class="button" type="submit">Login</button>
+            </form>
+        </div>
+        <div class="centerx">
+        <!-- Forgot Password Link -->
+        <a href="/forgotPassword" class="button">Forgot Password</a>
+        
+        <!-- Signup Section -->
+        <div class="signup">
+            <label class="form-label">Sign Up</label>
+            <div class="signup-buttons">
+                <a class="button" href="/registerProctor">Proctor</a>
+                <a class="button" href="/registerStudent">Student</a>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- JavaScript for Password Visibility Toggle -->
+    <script src="JS/db.js"></script>
+    <script src="JS/main.js"></script>
+    <script src="JS/login.js"></script>
+
+    <!-- <script src="JS/logout.js"></script> -->
+     <!-- IndexedDB functions -->
+    
+<script src="JS/loder.js"></script>
+</body>
+</html>

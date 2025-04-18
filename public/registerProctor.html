@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proctor Registration</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/Ui_loader.css">
+
+</head>
+<body>
+
+    <!-- Proctor Registration Form -->
+    <div class="form register-form" id="proctor-register">
+        <h2 class="heading">Proctor Registration</h2>
+        <form id="proctorRegistrationForm" action="/registerProctor" method="post" onsubmit="validateProctorForm(event)">
+            <label for="proctorPhoto" class="form-label">Profile Photo</label>
+            <input type="file" id="proctorPhoto" name="profilePhoto" class="input" accept="image/*" onchange="previewPhoto(event)" required />
+            <img id="photoPreview" src="#" alt="Profile Preview" style="display:none; width:100px; height:100px; margin-top:10px; border-radius:50%;" />
+
+            <label for="proctorName" class="form-label">Name</label>
+            <input type="text" id="proctorName" name="name" class="input" placeholder="Name" required />
+
+            <label for="proctorEmail" class="form-label">College Email</label>
+            <input type="email" id="proctorEmail" name="email" class="input" placeholder="College Mail (someone@jerusalem.ac.in)" required />
+
+            <label for="proctorDesignation" class="form-label">Designation</label>
+            <input type="text" id="proctorDesignation" name="designation" class="input" placeholder="Designation" required />
+
+            <label for="proctorDepartment" class="form-label">Deparment</label>
+            <input type="text" id="proctorDepartment" name="deparment" class="input" placeholder="deparment" required />
+
+            <!-- 🔥 NEW: Proctor Phone Number -->
+            <label for="proctorPhone" class="form-label">Phone Number</label>
+            <input type="text" id="proctorPhone" name="phone_number" class="input" placeholder="Phone Number" required />
+
+            <label for="proctorPassword" class="form-label">Create Password</label>
+            <input type="password" id="proctorPassword" name="password" class="input" placeholder="Create Password" required />
+
+            <label for="proctorConfirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" id="proctorConfirmPassword" class="input" placeholder="Confirm Password" required />
+
+            <button type="submit" class="button">Register</button>
+            <p class="login-link">Already Registered? <a href="/login" class="link">Login here</a></p>
+        </form>
+    </div>
+
+    <script src="JS/registerProctor.js"></script>
+    
+<script src="JS/loder.js"></script>
+</body>
+</html>

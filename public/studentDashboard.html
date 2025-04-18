@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentsDashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/proctorDashboard.css">
+    <link rel="stylesheet" href="css/studentDashboard.css">
+    <link rel="stylesheet" href="css/Ui_loader.css">
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</head>
+<body>
+    <div id="profileContainer">
+        <img id="profilePhoto" src="/images/default-image.jpeg" alt="Profile Photo" class="profile-img">
+    </div>
+    
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-content">
+            <span class="close-btn" onclick="closeSidebar()">&times;</span>
+            <img id="sidebarProfilePhoto" src="/images/default-image.jpeg" alt="Profile Photo" class="profile-img">
+            <h2 id="studentName"></h2> 
+    
+            <p><strong>Email:</strong> <span class="studentEmail"></span></p>
+            <p><strong>Department:</strong> <span class="studentDept"></span></p>
+            <p><strong>Batch:</strong> <span class="studentBatch"></span></p>
+            <p><strong>Reg ID:</strong> <span class="studentRegID"></span></p>
+            <p><strong>Phone:</strong> <span class="studentPhone"></span></p>
+            <p><strong>Status:</strong> <span class="studentStatus"></span></p>
+            
+            
+            <button id="editProfile">Edit</button>
+        </div>
+    </div>
+    
+    <!-- Edit Profile Modal -->
+<div id="editProfileModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeEditModal">&times;</span>
+        <h2>Edit Profile</h2>
+        <form id="editProfileForm">
+            <label for="editName">Name:</label>
+            <input type="text" id="editName" name="name" required>
+        
+            <label for="editEmail">Email:</label>
+            <input type="email" id="editEmail" name="email" required>
+        
+            <label for="editDept">Department:</label>
+            <input type="text" id="editDepartment" name="department" required>
+        
+            <label for="editBatch">Batch:</label>
+            <input type="text" id="editBatch" name="batch" required>
+        
+            <label for="editRegID">Reg ID:</label>
+            <input type="text" id="editRegID" name="regid" required>
+        
+            <label for="editPhone">Phone:</label>
+            <input type="text" id="editPhone" name="phone_number" required>
+        
+            <label for="editStatus">Status:</label>
+            <input type="text" id="editStatus" name="status" required>
+        
+            <button type="submit" id="saveProfile">Save</button>
+        </form>
+        
+    </div>
+</div>
+
+    <div id="student-workspace">
+        
+        <h2 id="student-info-heading"></h2>
+        
+    
+        <div id="semesterTabs" style="display: none;">
+        <ul id="tab-headers">
+            <li class="tab-header" data-tab="1">Semester 1</li>
+            <li class="tab-header" data-tab="2">Semester 2</li>
+            <li class="tab-header" data-tab="3">Semester 3</li>
+            <li class="tab-header" data-tab="4">Semester 4</li>
+            <li class="tab-header" data-tab="5">Semester 5</li>
+            <li class="tab-header" data-tab="6">Semester 6</li>
+            <li class="tab-header" data-tab="7">Semester 7</li>
+            <li class="tab-header" data-tab="8">Semester 8</li>
+            <li class="tab-header" data-tab="achievements">Achievements</li>
+        </ul>
+    </div>
+        <!-- Semester Content -->
+        <div id="tab-contents">
+            <div id="tab-1" class="tab-content">Semester 1 content here...</div>
+            <div id="tab-2" class="tab-content">Semester 2 content here...</div>
+            <div id="tab-3" class="tab-content">Semester 3 content here...</div>
+            <div id="tab-4" class="tab-content">Semester 4 content here...</div>
+            <div id="tab-5" class="tab-content">Semester 5 content here...</div>
+            <div id="tab-6" class="tab-content">Semester 6 content here...</div>
+            <div id="tab-7" class="tab-content">Semester 7 content here...</div>
+            <div id="tab-8" class="tab-content">Semester 8 content here...</div>
+            <div id="tab-achievements" class="tab-content">Achievements content here...</div>
+        </div>
+    </div>  
+
+<div id="achievement-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-modal">&times;</span>
+        <h2>Upload Achievement</h2>
+
+        <!-- Achievement Title Input -->
+        <label for="achievement-title">Title:</label>
+        <input type="text" id="achievement-title" placeholder="Enter achievement title" required>
+
+        <!-- File Upload Input -->
+        <label for="achievement-file">Upload File:</label>
+        <input type="file" id="achievement-file" accept=".jpg,.jpeg,.png,.pdf" required>
+
+        <!-- Submit Button -->
+        <button id="submit-achievement">Upload</button>
+    </div>
+</div>
+<button type="button" id="logoutButton">Logout</button>
+    <script src="JS/studentDashboard.js" defer></script> 
+    <script src="JS/logout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
+
+    <script src="JS/loder.js"></script>
+</body>
+</html>

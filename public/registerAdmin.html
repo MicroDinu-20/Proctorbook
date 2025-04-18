@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Registration</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/Ui_loader.css">
+
+</head>
+<body>
+
+    <!-- Admin Registration Form -->
+    <div class="form register-form" id="admin-register">
+        <h2 class="heading">Admin Registration</h2>
+        <form id="adminRegistrationForm" action="/registerAdmin" method="post"  onsubmit="validateAdminForm(event)">
+
+            
+            <label for="adminPhoto" class="form-label">Profile Photo</label>
+            <input type="file" id="adminPhoto" name="profilePhoto" class="input" accept="image/*" onchange="previewPhoto(event)" required />
+            <img id="photoPreview" src="#" alt="Profile Preview" style="display:none; width:100px; height:100px; margin-top:10px; border-radius:50%;" />
+
+            <label for="adminName" class="form-label">Name</label>
+            <input type="text" id="adminName" name="username" class="input" placeholder="Username-Department" required />
+
+            <label for="adminEmail" class="form-label">College Email</label>
+            <input type="email" id="adminEmail" name="email" class="input" placeholder="College Mail (someone@jerusalem.ac.in)" required />
+
+            <label for="adminDepartment" class="form-label">Department</label>
+            <input type="text" id="adminDepartment" name="department" class="input" placeholder="Department" required />
+
+            <label for="adminPassword" class="form-label">Create Password</label>
+            <input type="password" id="adminPassword" name="password" class="input" placeholder="Create Password" required />
+
+            <label for="adminConfirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" id="adminConfirmPassword" class="input" placeholder="Confirm Password" required />
+
+            <!-- Profile Photo Upload -->
+            
+
+            <button type="submit" class="button">Register</button>
+            <p class="login-link">Already Registered? <a href="/login" class="link">Login here</a></p>
+        </form>
+    </div>
+
+    <script src="JS/registerAdmin.js"></script>
+   
+
+    <script src="JS/loder.js"></script>
+</body>
+</html>

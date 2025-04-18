@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/Ui_loader.css">
+
+</head>
+<body>
+    <div class="main">
+        <h1 class="heading">Student Registration</h1>
+        <div class="form register-form" id="student-register">
+            <form id="registrationForm" action="/registerStudent" method="post" onsubmit="validateStudentForm(event)">
+                <label for="studentPhoto" class="form-label">Profile Photo</label>
+            <input type="file" id="studentPhoto" name="profilePhoto" class="input" accept="image/*" onchange="previewPhoto(event)" required />
+            <img id="photoPreview" src="#" alt="Profile Preview" style="display:none; width:100px; height:100px; margin-top:10px; border-radius:50%;" />
+                
+                <label for="name" class="form-label">Name</label>
+                <input type="text" id="name" name="name" class="input" placeholder="Name" required />
+
+                <label for="email" class="form-label">College Email</label>
+                <input type="email" id="email" name="email" class="input" placeholder="College Mail (someone@jerusalem.ac.in)" required />
+
+                <label for="department" class="form-label">Department</label>
+                <div class="side-by-side">
+                    <input type="text" id="department" name="department" class="input" placeholder="Department" required>
+                    <input type="text" id="batch" name="batch" placeholder="Batch" class="input" required>
+                    
+                    <select id="year_of_study" name="year_of_study" class="input" required>
+                        <option value="" disabled selected>Year of Study</option>
+                        <option value="1">1st Year</option>
+                        <option value="2">2nd Year</option>
+                        <option value="3">3rd Year</option>
+                        <option value="4">4th Year</option>
+                    </select>
+                </div>
+
+                <label for="regid" class="form-label">Register No.</label>
+                <input type="text" id="regid" name="regid" placeholder="Register No." class="input" required />
+
+                <!-- 🔥 NEW: Student Phone Number -->
+                <label for="phoneNumber" class="form-label">Phone Number</label>
+                <input type="text" id="phoneNumber" name="phone_number" class="input" placeholder="Phone Number" required />
+
+                <!-- 🔥 NEW: Parent's Phone Number -->
+                <label for="parentPhoneNumber" class="form-label">Parent's Phone Number</label>
+                <input type="text" id="parentPhoneNumber" name="parent_phone_number" class="input" placeholder="Parent's Phone Number" required />
+
+                <label for="password" class="form-label">Create Password</label>
+                <input type="password" id="password" name="password" placeholder="Create Password" class="input" required />
+
+                <label for="confirmpassword" class="form-label">Confirm Password</label>
+                <input type="password" id="confirmpassword" placeholder="Confirm Password" class="input" required />
+
+                <button type="submit" class="button">Register</button>
+                <p>Already registered? <a href="/login" class="link">Login here</a></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="JS/registerStudent.js"></script>
+    
+<script src="JS/loder.js"></script>
+</body>
+</html>

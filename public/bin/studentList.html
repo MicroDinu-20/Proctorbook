@@ -1,0 +1,44 @@
+<!-- studentList.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+    <h1>Select a Student</h1>
+    <form id="studentForm" action="/studentDashboard" method="GET">
+        <ul id="studentList"></ul>
+        <button type="submit">Go to Selected Student Dashboard</button>
+    </form>
+
+    <script>
+        async function loadStudentList() {
+            try {
+                const response = await fetch('/studentList');
+                const students = await response.json();
+
+                const list = document.getElementById('studentList');
+                students.forEach(student => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <label>
+                            <input type="radio" name="studentId" value="${student.student_id}" required>
+                            ${student.name}
+                        </label>
+                    `;
+                    list.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('Error loading student list:', error);
+            }
+        }
+
+        // Load the student list when the page loads
+        loadStudentList();
+    </script>
+</body>
+</html>

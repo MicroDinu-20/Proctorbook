@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proctor Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/proctorDashboard.css">
+    <link rel="stylesheet" href="css/Ui_loader.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</head>
+<body>
+    <div class="loader-overlay" id="loader-overlay" style="display: none;">
+        <div class="loader" id="loader"></div>
+      </div>
+      <div id="profile-Container">
+        <img id="profilePhoto" src="/images/default-image.jpeg" alt="Profile Photo">
+    </div>
+      
+<!-- Sidebar -->
+<div id="sidebar">
+    <div class="proctor-info">
+        <h2 id="proctor-name">Proctor Name</h2>
+        <p id="proctor-designation">Designation</p>
+    </div>
+
+    
+
+    <div id="search-container">
+
+        <input type="text" id="sidebar-student-search" placeholder="Search students...">
+        <ul id="students-list"></ul>
+    </div>
+
+    <!-- Sidebar Icons at Bottom Left -->
+    <div id="sidebar-icons">
+        <!-- 📌 New "Assign Marks" Button -->
+        <button id="assign-marks-button" class="sidebar-icon" title="Assign Marks">
+            <i class="fas fa-tasks"></i>
+        </button>
+    
+        <button id="upload-marks-button" class="sidebar-icon" title="Upload Marks">
+            <i class="fas fa-upload"></i>
+        </button>
+       
+
+        <button id="edit-profile-button" class="sidebar-icon" title="Edit Profile">
+            <i class="fas fa-user-edit"></i>
+        </button>
+        <button id="logoutButton" class="sidebar-icon" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+    </div>
+</div>
+
+
+</div>
+<!-- Sidebar Toggle Button -->
+<button id="sidebar-toggle-btn">
+    <i class="fas fa-bars"></i>
+</button>
+
+
+<!-- Profile Update Modal -->
+<div id="profile-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-profile-modal">&times;</span>
+        <h2>Edit Profile</h2>
+        <form id="profile-form">
+            <label for="proctor-name-input">Name
+            <input type="text" id="proctor-name-input" name="name"></label>
+            <br>
+            <label for="proctor-email-input">Email
+            <input type="email" id="proctor-email-input" name="email"></label>
+            <br>
+            <label for="proctor-designation-input">Designation
+            <input type="text" id="proctor-designation-input" name="designation"></label>
+            <br>
+            <label for="proctor-phone-input">Phone
+            <input type="text" id="proctor-phone-input" name="phone_number"></label>
+            <br>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</div>
+<div style="position: absolute; top: 20px; right: 20px;">
+  <button id="notifyBtn" style="padding: 10px 16px; border-radius: 8px; background: #28a745; color: white; border: none;">
+    Notify Parents
+  </button>
+</div>
+
+ <!-- Main Workspace -->
+<div id="student-workspace">
+    <h2 id="student-info-heading"></h2>
+    <div id="watermark" class="watermark">Click any student to view details</div>
+
+    <div id="semesterTabs" style="display: none;">
+    <ul id="tab-headers">
+        <li class="tab-header" data-tab="1">Semester 1</li>
+        <li class="tab-header" data-tab="2">Semester 2</li>
+        <li class="tab-header" data-tab="3">Semester 3</li>
+        <li class="tab-header" data-tab="4">Semester 4</li>
+        <li class="tab-header" data-tab="5">Semester 5</li>
+        <li class="tab-header" data-tab="6">Semester 6</li>
+        <li class="tab-header" data-tab="7">Semester 7</li>
+        <li class="tab-header" data-tab="8">Semester 8</li>
+        <li class="tab-header" data-tab="achievements">Achievements</li>
+    </ul>
+</div>
+    <!-- Semester Content -->
+    <div id="tab-contents">
+        <div id="tab-1" class="tab-content">Semester 1 content here...</div>
+        <div id="tab-2" class="tab-content">Semester 2 content here...</div>
+        <div id="tab-3" class="tab-content">Semester 3 content here...</div>
+        <div id="tab-4" class="tab-content">Semester 4 content here...</div>
+        <div id="tab-5" class="tab-content">Semester 5 content here...</div>
+        <div id="tab-6" class="tab-content">Semester 6 content here...</div>
+        <div id="tab-7" class="tab-content">Semester 7 content here...</div>
+        <div id="tab-8" class="tab-content">Semester 8 content here...</div>
+        <div id="tab-achievements" class="tab-content">Achievements content here...</div>
+    </div>
+</div>
+
+    <!-- Upload Marks Modal -->
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+            <span id="close-upload-modal" style="cursor: pointer;">&times;</span>
+            <h2>Upload Marks</h2>
+            <form id="uploadCSVForm" enctype="multipart/form-data">
+                <input type="file" id="marksFile" name="marksFile" accept=".csv" required>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+    </div>
+    <script src="JS/logout.js"></script>
+    <!-- <script src="JS/proctorDashboard.js" defer></script> -->
+    <script type="module" src="JS/proctorDashboard.js"></script>
+
+</body>
+</html>
