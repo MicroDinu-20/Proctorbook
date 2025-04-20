@@ -658,6 +658,16 @@ app.post('/importProctorData', upload.single('proctorFile'), async (req, res) =>
                         if (!/^\d{10}$/.test(row.phone_number)) {
                             throw new Error('Phone number must be 10 digits.');
                         }
+                        // Check if proctor already exists by regid or email
+                        const [existingProctor] = await db.execute(
+                            `SELECT * FROM proctors WHERE  email = ?`,
+                            [row.email]
+                        );
+
+                        if (existingProctor.length > 0) {
+                            console.log(`proctor with  email ${row.email} already exists. Skipping.`);
+                            continue;
+                        }
 
                         // Encrypt the password
                         const hashedPassword = await bcrypt.hash(row.password, saltRounds);
@@ -700,19 +710,23 @@ app.post('/importStudentData', upload.single('studentFile'), async (req, res) =>
                     for (const row of results) {
                         // Validate the student data
                         if (!row.email.endsWith('@jerusalemengg.ac.in') || !/^[a-zA-Z\s]+$/.test(row.name)) {
-                            throw new Error('Invalid email or name format for student.');
+                            console.warn(`Invalid data for ${row.email}, skipping.`);
+                            continue;
                         }
-                        if (!/^\d+$/.test(row.regid)) {
-                            throw new Error('Register No should be numeric.');
+                        if (!/^\d+$/.test(row.regid) || !/^\d{10}$/.test(row.phone_number) || !/^\d{10}$/.test(row.parent_phone_number) || !row.password) {
+                            console.warn(`Missing or invalid fields for ${row.email}, skipping.`);
+                            continue;
                         }
-                        if (!row.password) {
-                            throw new Error('Password is required for student.');
-                        }
-                        if (!/^\d{10}$/.test(row.phone_number)) {
-                            throw new Error('Phone number must be 10 digits.');
-                        }
-                        if (!/^\d{10}$/.test(row.parent_phone_number)) {
-                            throw new Error('Parent phone number must be 10 digits.');
+
+                        // Check if student already exists by regid or email
+                        const [existingStudent] = await db.execute(
+                            `SELECT * FROM students WHERE regid = ? OR email = ?`,
+                            [row.regid, row.email]
+                        );
+
+                        if (existingStudent.length > 0) {
+                            console.log(`Student with RegID ${row.regid} or email ${row.email} already exists. Skipping.`);
+                            continue;
                         }
 
                         // Encrypt the password
@@ -726,7 +740,7 @@ app.post('/importStudentData', upload.single('studentFile'), async (req, res) =>
                             [row.name, row.email, row.department, row.batch, row.regid, hashedPassword, row.year_of_study, row.phone_number, row.parent_phone_number]
                         );
                     }
-                    res.send('Student data imported successfully.');
+                    res.send('Student data import completed successfully.');
                 } catch (error) {
                     const errorMessage = error.sqlMessage || 'Error importing student data.';
                     res.status(500).send({ message: errorMessage, error: error.message });
@@ -743,6 +757,7 @@ app.post('/importStudentData', upload.single('studentFile'), async (req, res) =>
         res.status(400).send('Invalid file type. Please upload a CSV file for students.');
     }
 });
+
 app.post('/addSubject', async (req, res) => {
     const { semester, subject_name, subject_code, credit, batch } = req.body;
     const department = req.session.department; // Ensure subjects are department-specific
@@ -1070,7 +1085,7 @@ app.post('/assignSubjectsByDepartment', async (req, res) => {
 
         // 🔹 Fetch all students from the given batch & department
         const [students] = await db.execute(
-            "SELECT student_id, regid, year_of_study FROM students WHERE batch = ? AND department = ?",
+            "SELECT student_id, regid, year_of_study ,profilePhoto FROM students WHERE batch = ? AND department = ?",
             [batch, department]
         );
 
@@ -1090,18 +1105,20 @@ app.post('/assignSubjectsByDepartment', async (req, res) => {
 
         // 🔹 Insert subjects into student_academics for each student
         for (const student of students) {
-            for (const subject of subjects) {
-                await db.execute(
-                    `INSERT INTO student_academics (student_id, regid, subject, subject_code, semester, credit, year_of_study, department, batch) 
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            const insertPromises = subjects.map(subject => {
+                return db.execute(
+                    `INSERT INTO student_academics (student_id, regid, subject, subject_code, semester, credit, year_of_study, department, batch, profilePhoto)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                      ON DUPLICATE KEY UPDATE subject = VALUES(subject), credit = VALUES(credit), semester = VALUES(semester), year_of_study = VALUES(year_of_study)`,
                     [
                         student.student_id, student.regid, subject.subject_name, subject.subject_code,
-                        subject.semester, subject.credit, student.year_of_study, department, batch
+                        subject.semester, subject.credit, student.year_of_study, department, batch, student.profilePhoto
                     ]
                 );
-            }
+            });
+            await Promise.all(insertPromises);
         }
+        
 
         res.json({ message: "Subjects assigned to students successfully!" });
 
@@ -1528,7 +1545,7 @@ app.get('/getStudentAcademicRecord/:studentId', async (req, res) => {
 
         // Fetch student details
         const [student] = await db.execute(
-            "SELECT name, regid FROM students WHERE student_id = ?", 
+            "SELECT name, regid,profilePhoto FROM students WHERE student_id = ?", 
             [studentId]
         );
 
@@ -1822,8 +1839,8 @@ router.use((req, res) => {
 
 // Start the server//RAILWAY
 app.listen(PORT, () => {
-    // console.log(`Server is running on http://localhost:${PORT}`);
-    console.log(`Server is running on Railway : ${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
+    // console.log(`Server is running on Railway : ${PORT}`);
 });
 
 module.exports = app;

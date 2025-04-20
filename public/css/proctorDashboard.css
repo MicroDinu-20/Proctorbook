@@ -1,10 +1,10 @@
 /* 📌 Sidebar Styling */
 #sidebar {
-  width: 250px;
+  width: 300px;
   height: 100vh;
-  background: #2c3e50; /* Dark blue */
+  background: #2c3e50;
   position: fixed;
-  left: -350px; /* Keep small portion visible */
+  left: -350px;
   top: 0;
   padding: 15px;
   transition: left 0.3s ease-in-out;
@@ -12,16 +12,44 @@
   color: #fff;
   z-index: 1000;
   overflow-y: auto;
-  overflow-x: auto; /* Fixes content overflow */
+  overflow-x: auto;
   display: flex;
   flex-direction: column;
+  justify-content: space-between; /* This pushes stuff to top and bottom */
+}
 
+#sidebar-icons {
+  display: flex;
+  flex-direction: row; /* stack vertically */
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin: auto;
+  margin-bottom: 20px;
+  margin-left:-17px;
 }
 
 /* 📌 Sidebar Open State */
 #sidebar.open {
   left: 0px;
   
+}
+#top-right-photo {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+#top-right-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* 📌 Sidebar Toggle Button */
@@ -55,7 +83,9 @@
   border-radius: 5px;
   background: #34495e;
 }
-
+#student-header {
+  text-align: center;
+}
 /* 📌 Search Bar and Student List */
 #search-container {
   display: flex;
@@ -87,8 +117,8 @@
 /* 📌 Student List Items - Styled as Buttons */
 #students-list li {
   display: block;
-  width:80%;
-  background: #34495e;
+  width:90%;
+  background: #344d5e;
   color: white;
   padding: 12px;
   margin-bottom: 5px;
@@ -102,24 +132,17 @@
 
 /* 📌 Hover Effect */
 #students-list li:hover {
-  background: #1abc9c;
+  background: #008cff;
   transform: translateX(5px); /* Small slide effect on hover */
 }
 
 /* 📌 Active Click Effect */
 #students-list li:active {
-  background: #16a085;
+  background: #0da0e9;
   transform: scale(0.98);
 }
 
-/* 📌 Sidebar Icons Container (Bottom Alignment) */
-#sidebar-icons {
-  display: flex;
-  flex-direction: column; /* Stack icons vertically */
-  align-items: flex-start;
-  padding-bottom: 15px;
-  margin-top: auto; /* Pushes icons to the bottom */
-}
+
 
 #profileContainer {
   position: absolute;
@@ -128,29 +151,6 @@
   width: 50px;
   height: 50px;
 }
-#profile-Container {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 50px;
-  height: 50px;
-}
-
-#profilePhoto {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ccc;
-}
-
-#profilePhoto {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ccc;
-}
 
 
 #profilePhoto {
@@ -160,6 +160,7 @@
   object-fit: cover;
   border: 2px solid #ccc;
 }
+
 
 /* 📌 Sidebar Icons */
 .sidebar-icon {
@@ -178,9 +179,12 @@
   border-radius: 50%;
   background: #34495e; /* Darker background */
 }
+#student-info-heading {
+  text-align: center;
+}
 
 .sidebar-icon:hover {
-  background: #1abc9c; /* Light Green on Hover */
+  background: #1496ec; /* Light Green on Hover */
   color: white;
 }
 
@@ -266,8 +270,9 @@
   border-collapse: collapse;
   margin-top: 10px;
 }
+
 .modal {
-  display: none; /* Hide initially */
+  display: none; 
   position: fixed;
   z-index: 100;
   left: 50%;
@@ -285,13 +290,32 @@
 }
 
 #close-upload-modal {
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 15px;
   cursor: pointer;
   font-size: 20px;
 }
+#close-profile-modal {
+  position: fixed;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+  font-size: 20px;
+}
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
 
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 
 .academic-table th, .academic-table td {
   border: 1px solid #ddd;  /* Adds a border */

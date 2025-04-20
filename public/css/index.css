@@ -1,0 +1,18 @@
+a {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background-color: #00bfff;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  width: 30%;
+  margin: 30px auto;
+  position: relative;
+}
+
+h1 {
+  font-family: 'Poppins', sans-serif; /* you can swap in a cooler font if you want */
+  text-align: center;
+  position: relative;
+}

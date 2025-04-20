@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proctor Dashboard</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <!-- <link rel="stylesheet" href="css/styles.css"> -->
     <link rel="stylesheet" href="css/proctorDashboard.css">
     <link rel="stylesheet" href="css/Ui_loader.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -15,15 +15,16 @@
     <div class="loader-overlay" id="loader-overlay" style="display: none;">
         <div class="loader" id="loader"></div>
       </div>
-      <div id="profile-Container">
-        <img id="profilePhoto" src="/images/default-image.jpeg" alt="Profile Photo">
-    </div>
+    
       
 <!-- Sidebar -->
 <div id="sidebar">
     <div class="proctor-info">
         <h2 id="proctor-name">Proctor Name</h2>
         <p id="proctor-designation">Designation</p>
+        <!-- <div id="profile-Container">
+            <img id="profilePhoto" src="/images/default-image.jpeg" alt="Profile Photo">
+        </div> -->
     </div>
 
     
@@ -33,27 +34,33 @@
         <input type="text" id="sidebar-student-search" placeholder="Search students...">
         <ul id="students-list"></ul>
     </div>
+<div id="sidebar-icons">
+    <button id="assign-marks-button" class="sidebar-icon" title="Assign Marks">
+        <i class="fas fa-tasks"></i>
+    </button>
 
-    <!-- Sidebar Icons at Bottom Left -->
-    <div id="sidebar-icons">
-        <!-- 📌 New "Assign Marks" Button -->
-        <button id="assign-marks-button" class="sidebar-icon" title="Assign Marks">
-            <i class="fas fa-tasks"></i>
-        </button>
-    
-        <button id="upload-marks-button" class="sidebar-icon" title="Upload Marks">
-            <i class="fas fa-upload"></i>
-        </button>
-       
+    <button id="upload-marks-button" class="sidebar-icon" title="Upload Marks">
+        <i class="fas fa-upload"></i>
+    </button>
 
-        <button id="edit-profile-button" class="sidebar-icon" title="Edit Profile">
-            <i class="fas fa-user-edit"></i>
-        </button>
-        <button id="logoutButton" class="sidebar-icon" title="Logout">
-            <i class="fas fa-sign-out-alt"></i>
-        </button>
-    </div>
+    <button id="edit-profile-button" class="sidebar-icon" title="Edit Profile">
+        <i class="fas fa-user-edit"></i>
+    </button>
+
+    <button id="notifyBtn" class="sidebar-icon" title="Notifications">
+        <i class="fas fa-bell"></i>
+    </button>
+<!-- 
+    <button id="help-button" class="sidebar-icon" title="Help">
+        <i class="fas fa-question-circle"></i>
+    </button> -->
+
+    <button id="logoutButton" class="sidebar-icon" title="Logout">
+        <i class="fas fa-sign-out-alt"></i>
+    </button>
 </div>
+
+
 
 
 </div>
@@ -85,15 +92,11 @@
         </form>
     </div>
 </div>
-<div style="position: absolute; top: 20px; right: 20px;">
-  <button id="notifyBtn" style="padding: 10px 16px; border-radius: 8px; background: #28a745; color: white; border: none;">
-    Notify Parents
-  </button>
-</div>
 
  <!-- Main Workspace -->
 <div id="student-workspace">
     <h2 id="student-info-heading"></h2>
+    
     <div id="watermark" class="watermark">Click any student to view details</div>
 
     <div id="semesterTabs" style="display: none;">
@@ -126,7 +129,7 @@
     <!-- Upload Marks Modal -->
     <div id="uploadModal" class="modal">
         <div class="modal-content">
-            <span id="close-upload-modal" style="cursor: pointer;">&times;</span>
+            <span class="close" id="close-upload-modal" style="cursor: pointer;">&times;</span>
             <h2>Upload Marks</h2>
             <form id="uploadCSVForm" enctype="multipart/form-data">
                 <input type="file" id="marksFile" name="marksFile" accept=".csv" required>

@@ -342,26 +342,63 @@ document.getElementById('uploadCSVForm').addEventListener('submit', function (ev
 
     loadAssignedStudents();
 });
+
+function convertGoogleDriveLink(url) {
+    if (!url || typeof url !== 'string') {
+        console.error("❌ Invalid URL:", url);
+        return "/images/default-image.jpeg";  // Fallback URL if invalid
+    }
+
+    const match = url.match(/(?:\/d\/|id=)([^\/?]+)/);
+    return match ? `https://drive.google.com/thumbnail?id=${match[1]}` : url;
+}
+
 async function loadStudentWorkspace(studentId) {
     try {
-        
+        // Fetch student data and subjects
         const response = await fetch(`/getStudentAcademicRecord/${studentId}`);
         const { student, subjects } = await response.json();
 
+        // Log the fetched student data for debugging
+        console.log("Fetched Student Data:", student);
+
         if (!student || !subjects) {
             throw new Error("Invalid student data received.");
-            
         }
 
+        // Check if profilePhoto exists and is valid
+        const photoUrl = student.profilePhoto 
+            ? convertGoogleDriveLink(student.profilePhoto) 
+            : "/images/default-image.jpeg";
+
+        console.log("Converted Photo URL:", photoUrl);
+
+        // Get the workspace container and clear it
         const workspace = $('#student-workspace');
         workspace.empty();
 
-        // 📌 Student Header
+        // Append the profile photo to the workspace
+        workspace.append(`
+            <div id="top-right-photo">
+                <img id="profilePhoto" loading ="lazy" src="${photoUrl}" alt="Profile Photo">
+            </div>
+        `);
+
+        // Set error handler for the image in case it fails to load
+        const profileImg = document.getElementById("profilePhoto");
+        if (profileImg) {
+            profileImg.onerror = function () {
+                this.src = "/images/default-image.jpeg"; // Fallback if image fails to load
+            };
+        }
+        // Append student header
         workspace.append(`
             <div id="student-header">
                 <h3>${student.name} (${student.regid})</h3>
             </div>
         `);
+
+        
 
         // 📌 Create Semester Tabs (1-8) + Achievements
         let tabHtml = `<ul id="tab-headers" class="tab-container">`;
@@ -554,8 +591,8 @@ async function loadStudentWorkspace(studentId) {
     
             const achievements = await response.json();
     
-            let achHtml = `<button id="upload-achievement-btn" class="upload-btn">Upload Achievement</button>`;
-    
+            let achHtml = "";
+
             if (achievements.length === 0) {
                 achHtml += '<p class="no-data">No achievements uploaded yet.</p>';
             } else {
@@ -667,40 +704,40 @@ async function loadStudentWorkspace(studentId) {
                 });
         }
     });
-    function convertGoogleDriveLink(url) {
-        const match = url.match(/(?:\/d\/|id=)([^\/?]+)/);
-        return match ? `https://drive.google.com/thumbnail?id=${match[1]}` : url;
-    }
+    // function convertGoogleDriveLink(url) {
+    //     const match = url.match(/(?:\/d\/|id=)([^\/?]+)/);
+    //     return match ? `https://drive.google.com/thumbnail?id=${match[1]}` : url;
+    // }
     
-    function getGoogleDriveImageUrl(fileId) {
-        return `https://drive.google.com/thumbnail?id=${fileId}`;
-    }
+    // function getGoogleDriveImageUrl(fileId) {
+    //     return `https://drive.google.com/thumbnail?id=${fileId}`;
+    // }
     
     
     
-    document.addEventListener("DOMContentLoaded", async function () {
-        try {
-            const response = await fetch("/getUserProfile");
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    // document.addEventListener("DOMContentLoaded", async function () {
+    //     try {
+    //         const response = await fetch("/getUserProfile");
+    //         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     
-            const data = await response.json();
-            const profileImg = document.getElementById("profilePhoto");
+    //         const data = await response.json();
+    //         const profileImg = document.getElementById("profilePhoto");
     
-            if (data.profilePhoto && data.profilePhoto.trim() !== "") {
-                profileImg.src = convertGoogleDriveLink(data.profilePhoto);
-            } else {
-                profileImg.src = "/images/default-image.jpeg";
-            }
+    //         if (data.profilePhoto && data.profilePhoto.trim() !== "") {
+    //             profileImg.src = convertGoogleDriveLink(data.profilePhoto);
+    //         } else {
+    //             profileImg.src = "/images/default-image.jpeg";
+    //         }
     
-            profileImg.onerror = function () {
-                profileImg.src = "/images/default-image.jpeg"; // Fallback if image fails to load
-            };
+    //         profileImg.onerror = function () {
+    //             profileImg.src = "/images/default-image.jpeg"; // Fallback if image fails to load
+    //         };
     
-        } catch (error) {
-            console.error("❌ Error loading profile data:", error);
-            document.getElementById("profilePhoto").src = "/images/default-image.jpeg";
-        }
-    });
+    //     } catch (error) {
+    //         console.error("❌ Error loading profile data:", error);
+    //         document.getElementById("profilePhoto").src = "/images/default-image.jpeg";
+    //     }
+    // });
     
     document.getElementById('notifyBtn').addEventListener('click', async () => {
         const semester = prompt("Enter which semester result is published (e.g. 5th, 6th):");

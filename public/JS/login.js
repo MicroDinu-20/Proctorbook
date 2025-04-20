@@ -38,15 +38,23 @@ document.addEventListener("DOMContentLoaded", () => {
     studentButton.addEventListener("click", () => selectRole("student", studentButton));
 
     // ✅ Password visibility toggle
-    // togglePassword.addEventListener("click", () => {
-    //     passwordInput.type = passwordInput.type === "password" ? "text" : "password";
-    //     togglePassword.textContent = passwordInput.type === "password" ? "👁️" : "🙈";
-    // });
+    togglePassword.addEventListener("click", () => {
+        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        togglePassword.textContent = passwordInput.type === "password" ? "👁️" : "🙈";
+    
+        setTimeout(() => {
+            // Only reset if it's currently visible (type is "text")
+            if (passwordInput.type === "text") {
+                passwordInput.type = "password";
+                togglePassword.textContent = "👁️";  // Reset icon back to eye
+            }
+        }, 2000); // 3-second delay
+    });
+    
 
     // ✅ Handle login form submission
-    loginForm.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
+   document.getElementById("loginForm").addEventListener("submit",async (e) =>{
+    e.preventDefault();
         const email = emailInput.value.trim();
         const password = passwordInput.value.trim();
         const role = selectedRoleInput.value.trim();
@@ -58,8 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {//RAILWAY
-            // const response = await fetch('/login', {
-            const response = await fetch('https://studentsrecordsystem-production.up.railway.app/login', {
+            const response = await fetch('/login', {
+            // const response = await fetch('https://studentsrecordsystem-production.up.railway.app/login', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password, role, rememberMe }),

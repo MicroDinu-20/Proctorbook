@@ -68,107 +68,93 @@ $(document).ready(function () {
 
     // ========== ASSIGN SUBJECTS ==========
 
-
-
-    // Open Assign Subjects Modal
-$('#assign-subjects-button').click(() => {
-    showLoader(); // 🔥 Show loader before fetching data
-
-    // Fetch admin department
-    fetchAdminDepartment();
-
-    // Fetch batches by department, then hide loader and show modal
-    fetchBatchesByDepartment().then(() => {
-        setTimeout(() => {
-            console.log("Opening modal after ensuring dropdown is populated.");
-            $('#assign-subjects-modal').show();
-            hideLoader(); // 🔥 Hide loader once data is ready
-        }, 200);  
-    }).catch(error => {
-        console.error("Error fetching batches:", error);
-        hideLoader(); // 🔥 Hide loader even if there's an error
-    });
-});
-
-    
-
-    // Close Modal
-    $('#close-assign-subjects-modal').click(() => {
-        $('#assign-subjects-modal').hide();
-    });
-
-    // Fetch Admin's Department from Session (if not already fetched)
-    function fetchAdminDepartment() {
-        showLoader();
-        if (adminDepartment) return; // Avoid multiple requests if already fetched
-
-        $.ajax({
-            type: 'GET',
-            url: '/getAdminDepartment',
-            success: function (data) {
-                adminDepartment = data.department;
-                $('#admin-department').text(adminDepartment);
-                hideLoader();
-            },
-            error: function () {
-                alert("Error fetching admin department.");
-                hideLoader();
-            }
-        });
-    }
-
-    // Fetch Batches for Admin's Department
     function fetchBatchesByDepartment() {
-        
-        $.ajax({
-            type: 'GET',
-            url: '/getBatchesByDepartment',
-            success: function (data) {
-                console.log("Batches received for dropdown:", data);
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'GET',
+                url: '/getBatchesByDepartment',
+                success: function (data) {
+                    console.log("Batches received for dropdown:", data);
     
-                let batchSelect = $('#assign-batch-select2');
+                    let batchSelect = $('#assign-batch-select2');
+                    if (batchSelect.length === 0) {
+                        console.error("Dropdown element #assign-batch-select2 not found!");
+                        return reject("Dropdown not found");
+                    }
     
-                if (batchSelect.length === 0) {
-                    console.error("Dropdown element #assign-batch-select2 not found!");
-                    return;
+                    batchSelect.empty();
+                    batchSelect.append('<option value="">Select Batch</option>');
+    
+                    if (!Array.isArray(data) || data.length === 0) {
+                        console.warn("No batches available for department.");
+                        alert("No batches available for your department.");
+                        return resolve(); // resolve empty
+                    }
+    
+                    data.forEach(batch => {
+                        console.log("Appending batch:", batch.batch);
+                        batchSelect.append(`<option value="${batch.batch}">${batch.batch}</option>`);
+                    });
+    
+                    console.log("Dropdown final HTML after update:", batchSelect.html());
+                    resolve();
+                },
+                error: function (xhr) {
+                    console.error("Error fetching department-specific batches:", xhr.responseText);
+                    alert("Error fetching department-specific batches.");
+                    reject(xhr);
                 }
-    
-                batchSelect.empty();
-                batchSelect.append('<option value="">Select Batch</option>');
-    
-                if (!Array.isArray(data) || data.length === 0) {
-                    console.warn("No batches available for department.");
-                    alert("No batches available for your department.");
-                    return;
-                }
-    
-                data.forEach(batch => {
-                    console.log("Appending batch:", batch.batch);  // 🔥 Log each batch
-                    batchSelect.append(`<option value="${batch.batch}">${batch.batch}</option>`);
-                });
-    
-                console.log("Dropdown final HTML after update:", batchSelect.html());  // 🔥 Log final dropdown content
-            },
-            error: function (xhr) {
-                console.error("Error fetching department-specific batches:", xhr.responseText);
-                alert("Error fetching department-specific batches.");
-            }
+            });
         });
     }
     
+    $('#assign-subjects-button').click(() => {
+        showLoader();
     
-    
-    
+        fetchAdminDepartment().then(() => {
+            return fetchBatchesByDepartment();
+        }).then(() => {
+            setTimeout(() => {
+                console.log("Opening modal after ensuring dropdown is populated.");
+                $('#assign-subjects-modal').show();
+                hideLoader();
+            }, 200);
+        }).catch(error => {
+            console.error("Error:", error);
+            hideLoader();
+        });
+    });
 
-    // Assign Subjects
-    $('#confirm-assign-subjects').click(() => {
-        selectedBatch = $('#assign-batch-select2').val();
-
+    function fetchAdminDepartment() {
+        return new Promise((resolve, reject) => {
+            if (adminDepartment) return resolve(); // already fetched
+    
+            $.ajax({
+                type: 'GET',
+                url: '/getAdminDepartment',
+                success: function (data) {
+                    adminDepartment = data.department;
+                    $('#admin-department').text(adminDepartment);
+                    resolve();
+                },
+                error: function () {
+                    alert("Error fetching admin department.");
+                    reject("Failed to fetch department");
+                }
+            });
+        });
+    }
+    
+    $(document).on('click', '#confirm-assign-subjects', function () {
+        const selectedBatch = $('#assign-batch-select2').val();
+    
         if (!selectedBatch) {
-            alert("Please select a batch.");
+            alert("Please select a batch first.");
             return;
         }
-
+    
+        console.log("Batch selected:", selectedBatch);
+    
         $.ajax({
             type: 'POST',
             url: '/assignSubjectsByDepartment',
@@ -183,25 +169,6 @@ $('#assign-subjects-button').click(() => {
             }
         });
     });
-
-
-
-    
-    // ========== UPDATE ALL STUDENT MARKS ==========
-    // $('#update-all-marks-button').click(() => {
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: '/updateAllStudentMarks',
-    //         contentType: 'application/json',
-    //         success: function (response) {
-    //             alert(response.message || "Marks updated successfully!");
-    //         },
-    //         error: function (xhr) {
-    //             alert(xhr.responseText || "Error updating marks.");
-    //         }
-    //     });
-    // });
-
     // ========== ASSIGN PROCTOR ==========
 
     
@@ -343,8 +310,8 @@ $('#assign-subjects-button').click(() => {
             $.ajax({//RAILWAY
                 type: 'POST',
                 // // url: '/assignProctor',
-                // url: 'http://localhost:5000/assignProctor',
-                url:'https://studentsrecordsystem-production.up.railway.app/assignProctor',
+                url: 'http://localhost:5000/assignProctor',
+                // url:'https://studentsrecordsystem-production.up.railway.app/assignProctor',
                 data: JSON.stringify({ proctor_id: assignProctorId, student_ids: selectedStudents }),
                 contentType: 'application/json',
                 success: (response) => {

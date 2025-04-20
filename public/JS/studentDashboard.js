@@ -13,19 +13,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.error("Error loading session data:", error);
     }
 });
-$(document).on("click", "#upload-achievement-btn", function () {
-    $("#achievement-modal").fadeIn();
-});
 
-$(document).on("click", ".close-modal", function () {
-    $("#achievement-modal").fadeOut();
-});
-
-$(window).click(function(event) {
-    if ($(event.target).is("#achievement-modal")) {
-        $('#achievement-modal').fadeOut();
-    }
-});
 document.querySelectorAll(".student-item").forEach(student => {
     student.addEventListener("click", async function () {
         const studentId = this.dataset.studentId;
@@ -170,7 +158,7 @@ async function loadStudentWorkspace(studentId) {
 
         // 📌 Default to Semester 1
         $('.tab-header[data-tab="1"]').trigger('click');
-
+       
         // 📌 Achievement Upload Modal Handling
         $(document).on("click", "#upload-achievement-btn", function () {
             $("#achievement-modal").fadeIn();
@@ -186,50 +174,7 @@ async function loadStudentWorkspace(studentId) {
             }
         });
 
-        $(document).on("click", "#submit-achievement", async function () {
-            const fileInput = document.getElementById('achievement-file');
-            const titleInput = document.getElementById('achievement-title').value.trim();
-        
-            if (!titleInput) {
-                alert("Please enter a title.");
-                return;
-            }
-        
-            if (fileInput.files.length === 0) {
-                alert("Please select a file to upload.");
-                return;
-            }
-        
-            const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
-            formData.append("title", titleInput); // ✅ Now sending the title
-            formData.append("student_id", studentId);
-        
-            try {
-                const response = await fetch('/uploadAchievement', {
-                    method: 'POST',
-                    body: formData
-                });
-        
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error("Upload failed:", errorText);
-                    throw new Error("Failed to upload achievement.");
-                }
-        
-                const result = await response.json();
-                if (result.success) {
-                    alert("Achievement uploaded successfully!");
-                    $("#achievement-modal").fadeOut();
-                    loadAchievements(studentId);
-                } else {
-                    alert(result.message || "Failed to upload achievement.");
-                }
-            } catch (error) {
-                console.error("❌ Error uploading achievement:", error);
-                alert("Error uploading achievement.");
-            }
-        });
+       
         
 
     } catch (error) {
@@ -285,13 +230,12 @@ async function loadAchievements(studentId) {
 
 
 
-
 $(document).off("click", "#submit-achievement").on("click", "#submit-achievement", async function (event) {
-    event.preventDefault();  // Prevent auto submission
+    event.preventDefault();
     const fileInput = document.getElementById('achievement-file');
     const titleInput = document.getElementById('achievement-title');
-    
-    $('#submit-achievement').prop('disabled', true); // Disable button
+
+    $('#submit-achievement').prop('disabled', true);
 
     const response = await fetch('/api/session');
     const data = await response.json();
@@ -299,7 +243,7 @@ $(document).off("click", "#submit-achievement").on("click", "#submit-achievement
 
     if (!studentId) {
         alert("Student ID is not set. Please log in again.");
-        $('#submit-achievement').prop('disabled', false); 
+        $('#submit-achievement').prop('disabled', false);
         return;
     }
 
@@ -325,19 +269,35 @@ $(document).off("click", "#submit-achievement").on("click", "#submit-achievement
         console.log("Upload Response:", result);
 
         if (result.success) {
-            alert("Achievement uploaded successfully!");
+            Toastify({
+              text: "✅ Achievement uploaded successfully!",
+              duration: 3000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "#0da0e9",
+              stopOnFocus: true
+            }).showToast();
+          
             $('#achievement-modal').fadeOut();
             loadAchievements(studentId);
-        } else {
-            alert("Upload failed: " + result.message);
-        }
+          } else {
+            Toastify({
+              text: "❌ Upload failed: " + result.message,
+              duration: 3000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "#d83d4f",
+              stopOnFocus: true
+            }).showToast();
+          }
+          
 
     } catch (error) {
         console.error("Error uploading achievement:", error);
         alert("An error occurred while uploading.");
     }
 
-    $('#submit-achievement').prop('disabled', false); // Re-enable button
+    $('#submit-achievement').prop('disabled', false);
 });
 
 
